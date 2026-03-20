@@ -1,67 +1,105 @@
-# 🚀 NFT Minting Platform (Soroban Smart Contract)
+# 🚀 StellarMint — Permissionless NFT Minting Platform
 
 ## 📌 Project Description
-This project is a basic NFT (Non-Fungible Token) minting platform built using **Soroban**, the smart contract platform on the Stellar blockchain.
-
-It allows users to mint unique NFTs, store metadata, transfer ownership, and query NFT details — all on-chain.
+A fully **permissionless** NFT minting platform built on **Stellar/Soroban**. Anyone can mint, view, and transfer unique digital assets on-chain — no admin roles, no gatekeepers, no initialization functions.
 
 ---
 
-## ⚙️ What it does
+## ⚙️ Architecture
 
-This smart contract enables:
+### Smart Contract (Soroban/Rust)
+- **Auto-increment token IDs** — No collision risk, no duplicate checking needed
+- **Rich metadata** — `String` type supports IPFS hashes, URLs, and long descriptions
+- **NFT Struct** — Each NFT stores: `owner`, `name`, `description`, `image`
+- **Persistent storage** — NFTs stored in persistent ledger entries
 
-- Minting unique NFTs with metadata
-- Storing ownership securely on-chain
-- Transferring NFTs between users
-- Fetching NFT metadata and ownership
-- Listing all minted NFTs
-
-Each NFT is identified by a unique `token_id`.
+### Frontend (Vite + Vanilla JS)
+- **Freighter wallet** integration for transaction signing
+- **Full contract integration** via `@stellar/stellar-sdk`
+- **Live preview** while composing your NFT
+- **NFT Gallery** with dynamic card rendering
+- **Transfer modal** for sending NFTs to other users
+- **Premium dark theme** with glassmorphism and gradient animations
 
 ---
 
-## ✨ Features
+## ✨ Contract Functions
 
-- 🪙 **Mint NFTs**
-  - Create unique NFTs with metadata
-  - Prevents duplicate token IDs
-
-- 👤 **Ownership Tracking**
-  - Each NFT is mapped to an owner address
-
-- 🔁 **Transfer Functionality**
-  - Secure transfer with authentication
-
-- 📦 **Metadata Storage**
-  - Store simple metadata (e.g., IPFS hash or URI)
-
-- 📋 **NFT Listing**
-  - Retrieve all minted token IDs
+| Function | Permissioned? | Description |
+|---|---|---|
+| `mint(minter, name, description, image)` | ❌ Anyone | Mints NFT, returns auto-generated token_id |
+| `transfer(from, to, token_id)` | ✅ Owner only | Transfers NFT (owner must sign) |
+| `get_nft(token_id)` | ❌ Anyone | Returns full NFT details |
+| `owner_of(token_id)` | ❌ Anyone | Returns owner address |
+| `total_supply()` | ❌ Anyone | Returns total minted count |
+| `list_all()` | ❌ Anyone | Returns all token IDs |
 
 ---
 
 ## 🛠 Tech Stack
 
-- **Language:** Rust
-- **Platform:** Soroban (Stellar Smart Contracts)
-- **Blockchain:** Stellar
+- **Smart Contract:** Rust + Soroban SDK v25
+- **Blockchain:** Stellar (Testnet)
+- **Frontend:** Vite + Vanilla JavaScript
+- **Wallet:** Freighter Browser Extension
+- **SDK:** @stellar/stellar-sdk + @stellar/freighter-api
 
 ---
 
-## 🚀 How to Deploy
+## 🚀 Getting Started
 
-1. Install Soroban CLI:
-   ```bash
-   cargo install --locked soroban-cli
-2. Build contract:
-   cargo build --target wasm32-unknown-unknown --release
-3. Deploy to Stellar network:
-   soroban contract deploy \
-     --wasm target/wasm32-unknown-unknown/release/your_contract.wasm \
-     --source your-key
-NFT Minting Platform:
-[https://stellar.expert/explorer/public/contract/YOUR_CONTRACT_ID
-](https://stellar.expert/explorer/testnet/contract/CAXGFIVRVXFNP6EYEBZL4UNXY4CHPARPTFGU6YKVORZJGWHENEUFHERA)
-Replace YOUR_CONTRACT_ID with your deployed contract address.
-<img width="1919" height="928" alt="image" src="https://github.com/user-attachments/assets/55aaf668-17ac-42da-b624-fdc3c07ee1fc" />
+### Prerequisites
+- [Rust](https://rustup.rs/) with `wasm32-unknown-unknown` target
+- [Stellar CLI](https://soroban.stellar.org/docs/getting-started/setup)
+- [Node.js](https://nodejs.org/) v18+
+- [Freighter Wallet](https://www.freighter.app/) browser extension
+
+### Build the Contract
+```bash
+cd contract
+stellar contract build
+```
+
+### Run Contract Tests
+```bash
+cd contract
+cargo test
+```
+
+### Deploy Contract (Testnet)
+```bash
+stellar contract deploy \
+  --wasm target/wasm32-unknown-unknown/release/contract.wasm \
+  --source your-key \
+  --network testnet
+```
+
+### Run the Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Then open http://localhost:5173 in your browser.
+
+### Configure Contract Address
+After deploying, update the `CONFIG.contractId` in `frontend/src/main.js` with your deployed contract address.
+
+---
+
+## 📷 Screenshots
+
+### Hero Section
+![Hero section with gradient orbs and stats](./screenshots/hero.png)
+
+### Mint Form
+![Mint form with live preview](./screenshots/mint.png)
+
+### NFT Gallery
+![NFT gallery with card grid](./screenshots/gallery.png)
+
+---
+
+## 📄 License
+MIT

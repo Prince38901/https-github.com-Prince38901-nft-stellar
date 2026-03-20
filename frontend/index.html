@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StellarMint — Permissionless NFT Minting on Stellar</title>
+    <meta name="description" content="Mint, view, and transfer unique NFTs on Stellar blockchain. Fully permissionless — no admin, no gatekeepers. Powered by Soroban smart contracts." />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💎</text></svg>" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <!-- ───── NAVBAR ───── -->
+    <nav id="navbar">
+      <div class="nav-inner">
+        <a href="#" class="logo">
+          <span class="logo-icon">💎</span>
+          <span class="logo-text">Stellar<span class="logo-accent">Mint</span></span>
+        </a>
+        <div class="nav-links">
+          <a href="#mint-section">Mint</a>
+          <a href="#gallery-section">Gallery</a>
+        </div>
+        <button id="btn-wallet" class="btn btn-glow">
+          <span class="wallet-dot"></span>
+          Connect Wallet
+        </button>
+      </div>
+    </nav>
+
+    <!-- ───── HERO ───── -->
+    <section id="hero">
+      <div class="hero-bg-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+      </div>
+      <div class="hero-content">
+        <span class="badge">✨ 100% Permissionless</span>
+        <h1>Mint NFTs on <span class="gradient-text">Stellar</span></h1>
+        <p class="hero-subtitle">
+          No gatekeepers. No admin. Anyone can mint, view, and transfer unique digital assets on-chain — powered by Soroban smart contracts.
+        </p>
+        <div class="hero-stats" id="hero-stats">
+          <div class="stat">
+            <span class="stat-value" id="stat-total">0</span>
+            <span class="stat-label">NFTs Minted</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value" id="stat-network">Testnet</span>
+            <span class="stat-label">Network</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value" id="stat-cost">Free</span>
+            <span class="stat-label">Gas Fees</span>
+          </div>
+        </div>
+        <a href="#mint-section" class="btn btn-primary btn-lg">Start Minting →</a>
+      </div>
+    </section>
+
+    <!-- ───── MINT SECTION ───── -->
+    <section id="mint-section">
+      <div class="section-inner">
+        <div class="section-header">
+          <span class="section-badge">🪙 Create</span>
+          <h2>Mint Your NFT</h2>
+          <p>Fill in the details below and mint your unique NFT to the Stellar blockchain. No permissions needed.</p>
+        </div>
+
+        <form id="mint-form" class="glass-card mint-form" autocomplete="off">
+          <div class="form-group">
+            <label for="nft-name">NFT Name</label>
+            <input type="text" id="nft-name" placeholder="e.g. Cosmic Horizon #42" required maxlength="64" />
+          </div>
+          <div class="form-group">
+            <label for="nft-description">Description</label>
+            <textarea id="nft-description" placeholder="Describe your NFT..." required rows="3" maxlength="256"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="nft-image">Image URL</label>
+            <input type="url" id="nft-image" placeholder="https://example.com/my-nft.png" required />
+            <span class="form-hint">IPFS or any publicly accessible image URL</span>
+          </div>
+
+          <!-- Live Preview -->
+          <div class="mint-preview" id="mint-preview">
+            <h4>Preview</h4>
+            <div class="nft-card preview-card">
+              <div class="nft-card-img">
+                <img id="preview-img" src="" alt="NFT Preview" />
+                <div class="img-placeholder" id="img-placeholder">
+                  <span>🖼️</span>
+                  <span>Image Preview</span>
+                </div>
+              </div>
+              <div class="nft-card-body">
+                <h3 id="preview-name">Your NFT Name</h3>
+                <p id="preview-desc">Your description here...</p>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" id="btn-mint" class="btn btn-primary btn-full" disabled>
+            <span class="btn-text">Connect Wallet to Mint</span>
+            <span class="btn-loader" hidden></span>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ───── GALLERY SECTION ───── -->
+    <section id="gallery-section">
+      <div class="section-inner">
+        <div class="section-header">
+          <span class="section-badge">🎨 Browse</span>
+          <h2>NFT Gallery</h2>
+          <p>Explore all NFTs minted on the platform. Click any card to see details.</p>
+        </div>
+
+        <div id="gallery-loading" class="gallery-loading">
+          <div class="spinner"></div>
+          <p>Loading NFTs from blockchain...</p>
+        </div>
+
+        <div id="gallery-empty" class="gallery-empty" hidden>
+          <span class="empty-icon">🌌</span>
+          <h3>No NFTs Yet</h3>
+          <p>Be the first to mint an NFT on this platform!</p>
+          <a href="#mint-section" class="btn btn-primary">Mint Now</a>
+        </div>
+
+        <div id="gallery-grid" class="gallery-grid" hidden></div>
+
+        <button id="btn-refresh" class="btn btn-outline" style="margin-top:2rem;">
+          🔄 Refresh Gallery
+        </button>
+      </div>
+    </section>
+
+    <!-- ───── NFT DETAIL MODAL ───── -->
+    <div id="modal-overlay" class="modal-overlay" hidden>
+      <div class="modal glass-card">
+        <button id="modal-close" class="modal-close">&times;</button>
+        <div class="modal-img-wrap">
+          <img id="modal-img" src="" alt="NFT" />
+        </div>
+        <div class="modal-body">
+          <h2 id="modal-name"></h2>
+          <p id="modal-desc" class="modal-description"></p>
+          <div class="modal-meta">
+            <div class="meta-row">
+              <span class="meta-label">Token ID</span>
+              <span class="meta-value mono" id="modal-id"></span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-label">Owner</span>
+              <span class="meta-value mono" id="modal-owner"></span>
+            </div>
+          </div>
+
+          <!-- Transfer Section -->
+          <div id="transfer-section" class="transfer-section" hidden>
+            <h4>Transfer this NFT</h4>
+            <div class="form-group">
+              <input type="text" id="transfer-to" placeholder="Recipient Stellar address (G...)" />
+            </div>
+            <button id="btn-transfer" class="btn btn-primary btn-full">
+              <span class="btn-text">Transfer NFT</span>
+              <span class="btn-loader" hidden></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ───── TOAST CONTAINER ───── -->
+    <div id="toast-container"></div>
+
+    <!-- ───── FOOTER ───── -->
+    <footer>
+      <div class="footer-inner">
+        <p>Built on <strong>Stellar / Soroban</strong> · Fully Permissionless · Open Source</p>
+        <p class="footer-sub">Contract: <code id="footer-contract">Not deployed</code></p>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
